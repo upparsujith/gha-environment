@@ -10,7 +10,7 @@ env:
   MONGODB_DB_NAME: gha-demo
   MONGODB_CLUSTER_ADDRESS: cluster0.oqvi2em.mongodb.net
   MONGODB_USERNAME: Sujith
-  MONGODB_PASSWORD: Suji@2000
+  MONGODB_PASSWORD: Suji123
   PORT: 8080
 
 jobs:
