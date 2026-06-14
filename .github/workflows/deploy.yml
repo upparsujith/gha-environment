@@ -4,30 +4,50 @@ on:
     branches:
       - main
       - dev
+
+# FIX 1: Moved variables here so they have GLOBAL scope and are shared across all jobs
+env: 
+  MONGODB_DB_NAME: gha-demo
+  MONGODB_CLUSTER_ADDRESS: cluster0.oqvi2em.mongodb.net
+  MONGODB_USERNAME: Sujith
+  MONGODB_PASSWORD: Suji@2000
+  PORT: 8080
+
 jobs:
   test:
-    environment: testing
     runs-on: ubuntu-latest
     steps:
       - name: Get Code
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4 # Upgraded to v4 for speed and support
+        
       - name: Cache dependencies
-        uses: actions/cache@v3
+        uses: actions/cache@v4 # Upgraded to v4
         with:
           path: ~/.npm
           key: npm-deps-${{ hashFiles('**/package-lock.json') }}
+          
       - name: Install dependencies
         run: npm ci
+        
+      # FIX 2: Added a proper background execution style using standard bash environment rules
       - name: Run server
-        run: npm start & npx wait-on http://127.0.0.1:XYZ
+        run: |
+          npm start & 
+          npx wait-on http://127.0.0.1:${{ env.PORT }}
+          
       - name: Run tests
         run: npm test
+        
+      # Reading a global env variable inside a job step
       - name: Output information
-        run: echo "..."
+        run: echo "MONGODB_USERNAME: ${{ env.MONGODB_USERNAME }}"
+
   deploy:
     needs: test
     runs-on: ubuntu-latest
     steps:
       - name: Output information
         run: |        
-          echo "..."
+          # This will now print perfectly because the variables are global!
+          echo "MONGODB_USERNAME: ${{ env.MONGODB_USERNAME }}"
+          echo "MONGODB_DB_NAME: ${{ env.MONGODB_DB_NAME }}"
