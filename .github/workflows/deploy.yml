@@ -4,6 +4,7 @@ on:
     branches:
       - main
       - dev
+      - master # FIX: Added master so it triggers when you git push master
 
 env: 
   MONGODB_DB_NAME: gha-demo
@@ -44,7 +45,6 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Output information
-        # FIXED: Indentation inside the block script has been cleanly aligned
         run: |
           echo "MONGODB_USERNAME: ${{ env.MONGODB_USERNAME }}"
           echo "MONGODB_DB_NAME: ${{ env.MONGODB_DB_NAME }}"
