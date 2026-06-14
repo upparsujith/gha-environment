@@ -2,7 +2,7 @@ name: Deployment
 on:
   push:
     branches:
-      - main
+      - master
       - dev
 
 # FIX 1: Moved variables here so they have GLOBAL scope and are shared across all jobs
